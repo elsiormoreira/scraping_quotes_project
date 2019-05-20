@@ -9,9 +9,10 @@ class QuotesSpider(scrapy.Spider):
 
     def parse(self, response):
         print('Wait a moment, please. I am access the site: ' + response.url)
-        yield {
-	        'author': response.css('small.author::text').getall(),
-	        'quote': response.css('span.text::text').getall(),
-	        'tags': response.css('a.tag::text').getall(),
-        }
-        
+        for quote in response.css('div.quote'):
+	        item = {
+		        'author': quote.css('small.author::text').get(),
+		        'text': quote.css('span.text::text').get(),
+		        'tags': quote.css('a.tag::text').getall(),
+	        }
+        	yield item
